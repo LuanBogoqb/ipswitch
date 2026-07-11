@@ -7,6 +7,10 @@ Use text to generate `.ips` patches to use with Atmosphere.
 See example for details.
 
 ---
+## About this fork
+Upstream IPSwitch stopped building a while ago. libnx removed the old HID input API it depended on, and that same break is what makes the old build crash on recent firmware. This fork ports the input code to the current libnx `pad` API so it compiles again on an up to date devkitPro and targets recent firmware (21.x and later). Nothing else changed, the patching logic is untouched. Runtime testing on hardware is ongoing.
+
+---
 ## Credit
 - plutoo for making elf2nso, used in compressing patched elf to nso (ISC License)
 - [Violet Inkling](https://www.deviantart.com/violetinkling) for the app icon art *(with permission)*
@@ -15,12 +19,12 @@ See example for details.
 
 ---
 ## Build
-Make sure you have:
-- DevkitA64
+You need a current devkitPro with:
+- devkitA64
 - libnx
-- [lz4](https://github.com/lz4/lz4) compiled with DevkitA64
+- the lz4 portlib, installed with `dkp-pacman -S switch-lz4`
 
-Then simply run: `make`
+Build from a path with no spaces in it, since the devkitPro build system does not handle spaces in the project path. Then run `make`. The output is `ipswitch.nro`.
 
 ---
 ## How to use
