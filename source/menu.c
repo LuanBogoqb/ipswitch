@@ -15,7 +15,7 @@ void mainMenu() {
                 1m) "Select an Operation or Press + to Quit:" CONSOLE_ESC(m));
         u64 kDown = selectFromList(&selection, main_menu_list);
 
-        if (kDown & KEY_A) {
+        if (kDown & HidNpadButton_A) {
             switch (selection) {
                 case 0:
                     kDown = patchTextToIPSMenu();
@@ -28,7 +28,7 @@ void mainMenu() {
             }
         }
 
-        if (kDown & KEY_PLUS) break;
+        if (kDown & HidNpadButton_Plus) break;
         consoleUpdate(NULL);
     }
 
@@ -104,11 +104,11 @@ u64 patchTextSelect(PatchTextTarget* pchtxt_target) {
             CONSOLE_ESC(m));
         kDown = selectFromList(&selection, pchtxt_list);
 
-        if (kDown & KEY_PLUS || kDown & KEY_B) {
+        if (kDown & HidNpadButton_Plus || kDown & HidNpadButton_B) {
             break;
         }
 
-        if (kDown & KEY_A) {
+        if (kDown & HidNpadButton_A) {
             // patch_txt_path
             strcpy(pchtxt_target->patch_txt_path, IPSWITCH_DIR);
             strcat(pchtxt_target->patch_txt_path,
@@ -138,9 +138,9 @@ u64 patchTextToIPSMenu() {
         PatchTextTarget pchtxt_target;
         kDown = patchTextSelect(&pchtxt_target);
 
-        if (kDown & KEY_PLUS || kDown & KEY_B) break;
+        if (kDown & HidNpadButton_Plus || kDown & HidNpadButton_B) break;
 
-        if (kDown & KEY_A) {
+        if (kDown & HidNpadButton_A) {
             int rc = 0;
 
             rc = patchTextToIPS(&pchtxt_target);
@@ -160,7 +160,7 @@ u64 patchTextToggleMenu() {
     PatchTextTarget pchtxt_target;
     kDown = patchTextSelect(&pchtxt_target);
 
-    if (kDown & KEY_A) {
+    if (kDown & HidNpadButton_A) {
         printf(CONSOLE_ESC(1m) 
             "Press: A to Toggle a Patch            | B to Save and Go Back\n"
             "       X to Abort and Discard Changes | "
@@ -184,7 +184,7 @@ u64 patchTextToggleMenu() {
         int selection = 0;  // dummy here
         kDown = selectFromList(&selection, patch_str_list);
 
-        if (kDown & KEY_B || kDown & KEY_Y) {
+        if (kDown & HidNpadButton_B || kDown & HidNpadButton_Y) {
             rc =
                 writePchtxtFromStrList(&pchtxt_target, pchtxt, patch_str_list);
 
@@ -195,7 +195,7 @@ u64 patchTextToggleMenu() {
                 goto end;
             }
 
-            if (kDown & KEY_Y) {
+            if (kDown & HidNpadButton_Y) {
                 rc = patchTextToIPS(&pchtxt_target);
 
                 if (R_SUCCEEDED(rc))

@@ -5,6 +5,7 @@
 
 int main(int argc, char **argv) {
     consoleInit(NULL);
+    inputInit();
 
     if (checkRequirement() == 0) {
         printf(CONSOLE_ESC(35;1m)

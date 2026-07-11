@@ -1,5 +1,12 @@
 #include "console.h"
 
+static PadState g_pad;
+
+void inputInit(void) {
+    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+    padInitializeDefault(&g_pad);
+}
+
 u16 getStringTailU16(char* str) {
     return *(u16*)&str[0xFE];
 }
@@ -128,26 +135,25 @@ u64 selectFromList(int* selection, StrList* str_list) {
         if(userConfirm("Error: list is empty"))
             return 0;
         else
-            return KEY_PLUS;
+            return HidNpadButton_Plus;
     }
 
     selectIndex(selection, str_list, 0);
 
     u64 kDownPrevious = 0xFFFFFFFFFFFFFFFF;
     while(appletMainLoop()) {
-        hidScanInput();
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        kDown = kDown&(0xFFFFFFFFFFFFFFFF-KEY_TOUCH); // "can't touch this"
+        padUpdate(&g_pad);
+        u64 kDown = padGetButtonsDown(&g_pad);
 
-        if (kDown & KEY_UP)
+        if (kDown & HidNpadButton_Up)
             selectIndex(selection, str_list, -1);
-        else if (kDown & KEY_DOWN)
+        else if (kDown & HidNpadButton_Down)
             selectIndex(selection, str_list, 1);
-        else if (kDown & KEY_LEFT)
+        else if (kDown & HidNpadButton_Left)
             selectIndex(selection, str_list, -5);
-        else if (kDown & KEY_RIGHT)
+        else if (kDown & HidNpadButton_Right)
             selectIndex(selection, str_list, 5);
-        else if (kDown & KEY_A) {
+        else if (kDown & HidNpadButton_A) {
             char* cur_str = str_list->str_list[*selection];
             u16 str_tail = getStringTailU16(cur_str);
             if(str_tail == TOGGLE_ENABLED) {
@@ -175,14 +181,15 @@ u64 selectFromList(int* selection, StrList* str_list) {
 bool userConfirm(const char * msg) {
     printf("\n%s\nPress A to confirm, any other button to cancel\n", msg);
 
-    u64 kDownPrevious = hidKeysDown(CONTROLLER_P1_AUTO);
+    padUpdate(&g_pad);
+    u64 kDownPrevious = padGetButtonsDown(&g_pad);
     while(appletMainLoop())
     {
-        hidScanInput();
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        padUpdate(&g_pad);
+        u64 kDown = padGetButtonsDown(&g_pad);
 
         if(kDown > kDownPrevious) {
-            if (kDown & KEY_A)
+            if (kDown & HidNpadButton_A)
                 return true;
             else {
                 printf("Canceled\n");

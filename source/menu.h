@@ -13,7 +13,7 @@
 
 #define IPSWITCH_DIR "/switch/ipswitch/"
 
-u64 patchTextSelect();
+u64 patchTextSelect(PatchTextTarget* pchtxt_target);
 
 void mainMenu();
 
