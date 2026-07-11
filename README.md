@@ -8,7 +8,7 @@ See example for details.
 
 ---
 ## About this fork
-Upstream IPSwitch stopped building a while ago. libnx removed the old HID input API it depended on, and that same break is what makes the old build crash on recent firmware. This fork ports the input code to the current libnx `pad` API so it compiles again on an up to date devkitPro and targets recent firmware (21.x and later). Nothing else changed, the patching logic is untouched. Runtime testing on hardware is ongoing.
+Upstream IPSwitch stopped building a while ago. libnx removed the old HID input API it depended on, and that same break is what makes the old build crash on recent firmware. This fork ports the input code to the current libnx `pad` API so it compiles again on an up to date devkitPro and targets recent firmware (21.x and later). Nothing else changed, the patching logic is untouched. Confirmed booting on hardware (firmware 22.5.0).
 
 ---
 ## Credit
